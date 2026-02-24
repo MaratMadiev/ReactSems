@@ -1,0 +1,2 @@
+npm test
+.husky/pre-commit
