@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 const Notifications: React.FC = () => {
-  let msgCount = Math.floor(Math.random() * 10) + 1;
+  let msgCount = Math.floor(Math.random() * 10) - 1 + 1;
   const a = 1;
   const now: Date = new Date();
   const { t } = useTranslation();
