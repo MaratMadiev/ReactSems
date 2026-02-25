@@ -2,32 +2,20 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import App from "./App";
 
-// Мокаем i18next
+// Полностью мокаем i18n
+jest.mock("./i18n", () => ({}), { virtual: true });
+
+// Мокаем react-i18next
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string, options?: any) => {
-      if (key === "unread_messages") {
-        return `У вас ${options.count} непрочитанных сообщений`;
-      }
-      return key;
-    },
+    t: (key: string, options?: any) =>
+      key === "unread_messages" ? `У вас ${options.count} сообщений` : key,
   }),
+  initReactI18next: { init: () => {} },
 }));
 
-test("renders message with any number", () => {
+test("renders app with notifications", () => {
   render(<App />);
-
-  // Ищем текст с любым числом и словом "сообщени" (сообщения/сообщений)
-  const messageElement = screen.getByText(
-    /У вас \d+ (непрочитанных )?сообщени\w*/i,
-  );
-  expect(messageElement).toBeInTheDocument();
-});
-
-test("renders notification icon", () => {
-  render(<App />);
-
-  // Проверяем, что иконка отображается
-  const iconElement = screen.getByText("📩");
-  expect(iconElement).toBeInTheDocument();
+  expect(screen.getByText("📩")).toBeInTheDocument();
+  expect(screen.getByText(/У вас \d+ сообщений/)).toBeInTheDocument();
 });
